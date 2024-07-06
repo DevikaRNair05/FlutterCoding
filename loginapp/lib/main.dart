@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'aboutuspage.dart'; // Import the About Us page
 void main() {
   runApp(MyApp());
 }
@@ -10,6 +10,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
+       routes: {
+        '/about': (context) => AboutUsPage(), // Define the route for the About Us page
+      },
     );
   }
 }
@@ -76,7 +79,8 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle login
+                    // Navigate to the About Us page on login
+                    Navigator.pushNamed(context, '/about');
                   },
                   child: Text('Login now'),
                   style: ElevatedButton.styleFrom(
