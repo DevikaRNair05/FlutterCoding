@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
-import 'aboutuspage.dart'; // Import the About Us page
-void main() {
+import 'aboutuspage.dart';
+import 'database_helper.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
-       routes: {
-        '/about': (context) => AboutUsPage(), // Define the route for the About Us page
+      routes: {
+        '/about': (context) => AboutUsPage(),
       },
     );
   }
 }
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +49,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 32.0),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
@@ -49,6 +57,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 16.0),
                 TextField(
+                  controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -56,31 +65,35 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: false,
-                          onChanged: (bool? value) {},
-                        ),
-                        Text('Remember me'),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Handle forgot password
-                      },
-                      child: Text('Forgot password?'),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the About Us page on login
-                    Navigator.pushNamed(context, '/about');
+                  onPressed: () async {
+                    String email = emailController.text.trim();
+                    String password = passwordController.text.trim();
+
+                    Map<String, dynamic>? user =
+                        await databaseHelper.getUser(email, password);
+
+                    if (user != null) {
+                      Navigator.pushNamed(context, '/about');
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Invalid Credentials'),
+                            content: Text('Please check your email and password.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: Text('Login now'),
                   style: ElevatedButton.styleFrom(
@@ -98,6 +111,34 @@ class LoginPage extends StatelessWidget {
                     backgroundColor: Colors.black,
                   ),
                 ),
+                // SizedBox(height: 16.0),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     // Insert a user for testing purposes
+                //     await databaseHelper.insertUser('test1@example.com', 'password123');
+                //     showDialog(
+                //       context: context,
+                //       builder: (BuildContext context) {
+                //         return AlertDialog(
+                //           title: Text('User Inserted'),
+                //           content: Text('A test user has been inserted.'),
+                //           actions: <Widget>[
+                //             TextButton(
+                //               child: Text('OK'),
+                //               onPressed: () {
+                //                 Navigator.of(context).pop();
+                //               },
+                //             ),
+                //           ],
+                //         );
+                //       },
+                //     );
+                //   },
+                //   child: Text('Insert Test User'),
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: Colors.blue,
+                //   ),
+                //),
               ],
             ),
           ),
