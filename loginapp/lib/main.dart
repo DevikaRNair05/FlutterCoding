@@ -119,7 +119,7 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     // Insert a user for testing purposes
-                    await databaseHelper.insertUser('test1@example.com', 'password123');
+                    await databaseHelper.insertUser('devikarajeesh05@gmail.com', 'password123');
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
