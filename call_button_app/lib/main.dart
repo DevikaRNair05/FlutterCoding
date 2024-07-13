@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Call Button App',
+      title: 'URL Launcher',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -22,28 +22,42 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final String phoneNumber = '+919544519440';
   const MyHomePage({super.key});
-     
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Call Button App'),
+        title: const Text('URL Launcher'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: _makePhoneCall,
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
-          ),
-          child: const Text('Make a Call'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _makePhoneCall,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue, // Text color
+              ),
+              child: const Text('Make a Call'),
+            ),
+            const SizedBox(height: 20), // Add spacing between buttons
+            ElevatedButton(
+              onPressed: _visitWebsite,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue, // Text color
+              ),
+              child: const Text('Visit Website'),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Future<void> _makePhoneCall() async {
+    const String phoneNumber = '+919544519440';
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -55,4 +69,16 @@ class MyHomePage extends StatelessWidget {
       throw 'Could not launch $launchUri';
     }
   }
+
+ // Method to visit a website
+  Future<void> _visitWebsite() async {
+    final Uri url = Uri.parse('https://www.example.com');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      // Handle the error when the URL cannot be launched
+      throw 'Could not launch $url';
+    }
+  }
+
 }
