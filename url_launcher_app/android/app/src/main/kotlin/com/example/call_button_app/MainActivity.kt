@@ -1,4 +1,4 @@
-package com.example.call_button_app
+package com.example.url_launch_app
 
 import io.flutter.embedding.android.FlutterActivity
 

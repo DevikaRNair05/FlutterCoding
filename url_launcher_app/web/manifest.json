@@ -1,6 +1,6 @@
 {
-    "name": "call_button_app",
-    "short_name": "call_button_app",
+    "name": "url_launch_app",
+    "short_name": "url_launch_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
