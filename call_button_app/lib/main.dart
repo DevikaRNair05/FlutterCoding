@@ -72,7 +72,7 @@ class MyHomePage extends StatelessWidget {
 
  // Method to visit a website
   Future<void> _visitWebsite() async {
-    final Uri url = Uri.parse('https://www.example.com');
+    final Uri url = Uri.parse('https://flutter.dev/');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
